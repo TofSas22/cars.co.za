@@ -6,6 +6,7 @@ from app.sentiment import router as sentiment_router
 from fastapi.middleware.cors import CORSMiddleware
 import logging.config
 from app.config import settings, validate_settings, get_cors_origins, get_log_config
+import os
 
 # Configure logging
 logging.config.dictConfig(get_log_config())
@@ -26,12 +27,30 @@ app = FastAPI(
     description="API for analyzing YouTube video sentiment and engagement"
 )
 
-# Configure CORS
+# Configure CORS - Allow both development and production origins
+allowed_origins = [
+    "http://localhost:5173",  # Vite dev server
+    "http://localhost:3000",  # React dev server alternative
+    "http://127.0.0.1:5173",  # Alternative localhost
+    "https://your-frontend-domain.com",  # Replace with your actual production domain
+    "https://your-app.netlify.app",  # Example Netlify domain
+    "https://your-app.vercel.app",  # Example Vercel domain
+]
+
+# Add environment-specific origins
+if os.getenv("FRONTEND_URL"):
+    allowed_origins.append(os.getenv("FRONTEND_URL"))
+
+# Remove duplicates and filter out None values
+allowed_origins = list(set(filter(None, allowed_origins)))
+
+logger.info(f"Allowed CORS origins: {allowed_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=get_cors_origins(),
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -44,12 +63,21 @@ async def root():
     return {
         "message": f"Welcome to {settings.app_name}",
         "version": settings.app_version,
-        "status": "running"
+        "status": "running",
+        "cors_origins": len(allowed_origins)
     }
 
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+# Add a CORS test endpoint for debugging
+@app.get("/cors-test")
+async def cors_test():
+    return {
+        "message": "CORS is working!",
+        "allowed_origins": allowed_origins
+    }
 
 if __name__ == "__main__":
     import uvicorn
