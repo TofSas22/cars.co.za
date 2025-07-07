@@ -32,7 +32,8 @@ allowed_origins = [
     "http://localhost:5173",  # Vite dev server
     "http://localhost:3000",  # React dev server alternative
     "http://127.0.0.1:5173",  # Alternative localhost
-    "https://your-frontend-domain.com",  # Replace with your actual production domain
+    "http://127.0.0.1:3000",  # Alternative localhost for React
+    "https://cars-co-za-sentiment-analysis-dashboard.onrender.com",  # Production frontend domain
     "https://your-app.netlify.app",  # Example Netlify domain
     "https://your-app.vercel.app",  # Example Vercel domain
 ]
