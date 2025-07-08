@@ -34,7 +34,7 @@ allowed_origins = [
     "http://127.0.0.1:5173",  # Alternative localhost
     "http://127.0.0.1:3000",  # Alternative localhost for React
     "https://cars-co-za-sentiment-analysis-dashboard.onrender.com",  # Production frontend domain
-    "https://yt-senti-dash-4upjjb0ih-tofiek-sasmans-projects.vercel.app",  # Example Vercel domain
+#    "https://yt-senti-dash-4upjjb0ih-tofiek-sasmans-projects.vercel.app",  # Example Vercel domain
     "https://yt-senti-dash.vercel.app",  # Example Vercel domain
 ]
 
